@@ -53,7 +53,7 @@ func main() {
 
 	log.Printf("Connecting to %v", opts)
 	token := client.Connect()
-	if !token.WaitTimeout(5 * time.Second) {
+	if !token.WaitTimeout(5 * time.Second) || token.Error() != nil {
 		log.Fatalf("Error on connection: %s", token.Error())
 	}
 
@@ -82,7 +82,7 @@ func main() {
 		})
 	}()
 
-	fmt.Println(hex.EncodeToString(sha1.New().Sum([]byte(secret + "teacher"))))
+	log.Println("Secret example", hex.EncodeToString(sha1.New().Sum([]byte(secret + "teacher"))))
 
 	log.Printf("Start sending data")
 	for range time.Tick(2 * time.Second) {

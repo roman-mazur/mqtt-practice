@@ -3,14 +3,25 @@ version: '2.1'
 volumes:
   broker-volume:
 
+networks:
+  mqtt-network:
+
 services:
   broker:
     build: ./broker
     volumes:
       - 'broker-volume:/var/lib/rabbitmq'
-    network_mode: host
+    networks:
+      - mqtt-network
+    ports:
+      - 15672:15672
+      - 1883:1883
 
   inception:
     build: ./inceptor
-    network_mode: host
-    command: ["-host", "localhost"]
+    networks:
+      - mqtt-network
+    depends_on:
+      - broker
+    restart: always
+    command: ["-host", "broker"]
