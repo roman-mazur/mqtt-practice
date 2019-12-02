@@ -1,0 +1,16 @@
+version: '2.1'
+
+volumes:
+  broker-volume:
+
+services:
+  broker:
+    build: ./broker
+    volumes:
+      - 'broker-volume:/var/lib/rabbitmq'
+    network_mode: host
+
+  inception:
+    build: ./inceptor
+    network_mode: host
+    command: ["-host", "localhost"]
